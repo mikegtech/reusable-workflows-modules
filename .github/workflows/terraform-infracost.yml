@@ -32,7 +32,7 @@ jobs:
 
     env:
       TF_ROOT: ${{ inputs.working-directory }}
-      INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+      INFRA_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
 
     steps:
       - name: Harden Runner
@@ -44,7 +44,7 @@ jobs:
         uses: infracost/actions/setup@0d27b734c72a1abb0aba3e2c3f54e4982cbd2591
         # See https://github.com/infracost/actions/tree/master/setup for other inputs
         with:
-          api-key: ${INFRACOST_API_KEY}
+          api-key: ${INFRA_API_KEY}
 
       - name: Checkout
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
@@ -52,7 +52,7 @@ jobs:
       # Generate Infracost JSON file
       - name: Generate Infracost cost estimate
         run: |
-          export INFRACOST_API_KEY=${INFRACOST_API_KEY}
+          export INFRACOST_API_KEY=${INFRA_API_KEY}
           cd ${TF_ROOT}
           infracost breakdown --path=. \
                               --terraform-var-file=${{ inputs.terraform-var-file }} \
@@ -70,7 +70,7 @@ jobs:
       # See https://www.infracost.io/docs/features/cli_commands/#comment-on-pull-requests for other options.
       - name: Post Infracost comment
         run: |
-          export INFRACOST_API_KEY=${INFRACOST_API_KEY}
+          export INFRACOST_API_KEY=${INFRA_API_KEY}
           infracost comment github --path=/tmp/infracost.json \
                                    --repo=$GITHUB_REPOSITORY \
                                    --github-token=${{github.token}} \
