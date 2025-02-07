@@ -87,11 +87,11 @@ jobs:
         with:
           terraform_wrapper: false #this configuration is needed for us to call terraform output in a GitHub action
 
-      - name: Print debug info
-        run: |
-          echo environment is ${{ github.event.inputs.environment }}
-          echo working_directory is ${{ inputs.working-directory }}
-          echo repository is ${{ github.repository }}
+      # - name: Print debug info
+      #   run: |
+      #     echo environment is ${{ github.event.inputs.environment }}
+      #     echo working_directory is ${{ inputs.working-directory }}
+      #     echo repository is ${{ github.repository }}
 
       - name: Terraform Init without remote state
         run: |
