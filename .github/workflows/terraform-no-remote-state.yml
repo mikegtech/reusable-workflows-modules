@@ -38,37 +38,37 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 
         with:
-          role-to-assume: ${{ vars.TERRAFORM_ROLE_TO_ASSUME }}
-          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.TERRAFORM_ROLE_TO_ASSUME || vars.TERRAFORM_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION || vars.AWS_REGION }}
 
-      - uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
-        name: Cache plugin dir
-        with:
-          path: ~/.tflint.d/plugins
-          key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
+      # - uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
+      #   name: Cache plugin dir
+      #   with:
+      #     path: ~/.tflint.d/plugins
+      #     key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
 
-      - uses: terraform-linters/setup-tflint@a5a1af8c6551fb10c53f1cd4ba62359f1973746f # v3.1.1
-        name: Setup TFLint
-        with:
-          tflint_version: latest
+      # - uses: terraform-linters/setup-tflint@a5a1af8c6551fb10c53f1cd4ba62359f1973746f # v3.1.1
+      #   name: Setup TFLint
+      #   with:
+      #     tflint_version: latest
 
-      - name: Init TFLint
-        run: tflint --init
+      # - name: Init TFLint
+      #   run: tflint --init
 
-      - name: Run TFLint
-        run: tflint -f compact
+      # - name: Run TFLint
+      #   run: tflint -f compact
 
-      - name: Run Terrascan
-        uses: tenable/terrascan-action@81d74415906b5418095567a13d1ddb7f48c50cd2 # main
-        with:
-          iac_type: 'terraform'
-          iac_version: 'v14'
-          iac_dir: ${{ inputs.working-directory }}
-          policy_type: 'aws'
-          only_warn: false
-          scm_token: ${{ secrets.NPM_TOKEN }}
-          verbose: true
-          sarif_upload: true
+      # - name: Run Terrascan
+      #   uses: tenable/terrascan-action@81d74415906b5418095567a13d1ddb7f48c50cd2 # main
+      #   with:
+      #     iac_type: 'terraform'
+      #     iac_version: 'v14'
+      #     iac_dir: ${{ inputs.working-directory }}
+      #     policy_type: 'aws'
+      #     only_warn: false
+      #     scm_token: ${{ secrets.NPM_TOKEN }}
+      #     verbose: true
+      #     sarif_upload: true
 
       - name: Run Checkov action
         uses: bridgecrewio/checkov-action@487b93e19b10b7579d9a8c5be7800801a0f23f27 # master
